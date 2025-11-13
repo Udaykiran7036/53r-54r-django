@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-%)4@gle6&5tb#+&7e5x&90rmfe6pkstkmk@9!6$0ree7eta=ll
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['simpledjango-app-5qzd.onrender.com']
+ALLOWED_HOSTS = ['simpledjango-app-5qzd.onrender.com',"127.0.0.1"]
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "basic",
 ]
 
 MIDDLEWARE = [
@@ -75,8 +76,17 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME':"53r_54r",
+        'USER':'root',
+        'PASSWORD':'uday@7036',
+        'HOST':'127.0.0.1',
+        'PORT':'3306',
+        'OPTIONS':{
+            'charset':'utf8mb4',
+            'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
+
+        }
     }
 }
 
