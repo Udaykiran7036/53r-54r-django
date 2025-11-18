@@ -63,5 +63,37 @@ def addStudent(request):
             email=data.get("email")
             )
         return JsonResponse({"status":"success","id":student.id},status=200)
+    
+    elif request.method=="GET":
+        result=list(Student.objects.values())
+        print(result)
+        return JsonResponse({"status":"ok","data":result},status=200)
+    
+
+    elif request.method=="PUT":
+        data=json.loads(request.body)
+        ref_id=data.get("id") #getting id
+        new_email=data.get("email") #getting email
+        existing_student=Student.objects.get(id=ref_id) #fetched the object as per the id
+        # print(existing_student)
+
+        existing_student.email=new_email #updating with new email
+        existing_student.save()
+        updated_data=Student.objects.filter(id=ref_id).values().first()
+        return JsonResponse({"status":"data update successfully","upload_data":"upload data"},status=200)
+    elif request.method=="DELETE":
+        data=json.loads(request.body)
+        ref_id=data.get("id") #getting id
+        get_delting_daata=Student.objects.filter(id=ref_id).values().first()
+        to_be_delete=Student.objects.get(id=ref_id)
+        to_be_delete.delete()
+
+        return JsonResponse({"status":"success","message":"student record deletd successfully","deleted data":get_delting_daata},status=200)
     return JsonResponse({"error":"use post method"},status=400)
+
+
+def job1(request):
+    return JsonResponse({"message":"u have successfully applied for job1"},status=200)
+def job2(request):
+    return JsonResponse({"message":"u have successfully applied for job2"},status=200)
 
