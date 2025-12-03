@@ -5,6 +5,7 @@ from django.db import connection
 import json
 from django.views.decorators.csrf import csrf_exempt
 from basic.models import Student,Users
+from django.contrib.auth.hashers import make_password,check_password
 # Create your views here.
 def sample(request):
     return HttpResponse("hello world")
@@ -106,8 +107,35 @@ def signUp(request):
         user=Users.objects.create(
             username=data.get("username"),
             email=data.get("email"),
-            password=data.get("password")
-            )
+            password=make_password(data.get("password"))
+        )
         return JsonResponse({"status":"success"},status=200)
+    
+@csrf_exempt
+def login(request):
+    if request.method == "POST":
+        data =request.POST
+        print(data)
+        username = data.get('username')
+        password = data.get("password")
+        try:
+            user = Users.objects.get(username=username)
+            if check_password(password, user.password):
+                return JsonResponse({"status": 'successfully loggedin'}, status=200)
+            else:
+                return JsonResponse({"status": 'failure', "message": "invalid password"}, status=400)
+        except Users.DoesNotExist:
+                 return JsonResponse({"status":"failure","message":"user not found"},status=400)
+        
 
 
+
+@csrf_exempt
+def check(request):
+    hashed="pbkdf2_sha256$870000$XT53HkSQCW5DsF6mUeQ8cL$HobLftEkB9Km7xQ9y9k2vR6nTpb3KYciZ1/Ax5FwE4Y="
+    input_data=request.POST #when we send the data to form data
+    print(input_data)
+   # hashed=make_password(input_data.get("ip"))
+    x=check_password(input_data.get("ip"),hashed)
+    print(x)
+    return JsonResponse({"status":"success","data":x},status=200)
